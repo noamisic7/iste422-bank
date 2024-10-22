@@ -1,3 +1,5 @@
+I am using Java version 22.
+
 Command line to run for CheckingAccount: ./gradlew runCheckingFixture --args="CheckingAccountTest.csv"
 
 build.gradle had to be added to run runCheckingFixture --> task runCheckingFixture(type: JavaExec) {
@@ -22,7 +24,7 @@ This is for basic transactions, it does not account for more complex scenarios. 
 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-Command line to run for SavingsAccount: ./gradlew runSavingsFixture --args="SavingsAccountTest.csv"
+Command line to run for SavingsAccount: ./gradlew runSavingsFixture --args="src/test/resources/SavingsAccountTest.csv"
 
 build.gradle had to be added to run runSavingsFixture --> task runSavingsFixture(type: JavaExec) {
     group = "Execution"
@@ -43,4 +45,4 @@ initialBalance, interestRate, withdrawals, deposits, runMonthEndNTimes, finalBal
 , is seperating this (initialBalance, interestRate, withdrawals, deposits, runMonthEndNTimes, finalBalance) values.
 
 This is for basic transactions, it does not account for more complex scenarios. Such as early withdrawal penalties, minimum balance requirements, or compounding interest over long periods.
- is everything good
+is everything good

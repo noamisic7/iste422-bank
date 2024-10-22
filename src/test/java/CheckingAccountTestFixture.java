@@ -20,21 +20,22 @@ import java.util.List;
 public class CheckingAccountTestFixture {
     public static Logger logger = LogManager.getLogger(CheckingAccountTestFixture.class);
     // We could read the file from classpath instead of hardcoding the pathname too
-    static final String TEST_FILE = "src/test/resources/CheckingAccountTest.csv";
+    //static final String TEST_FILE = "src/test/resources/CheckingAccountTest.csv";
 
     record TestScenario(double initBalance,
-                        List<Double> checks,
-                        List<Double> withdrawals,
-                        List<Double> deposits,
-                        boolean runMonthEnd,
-                        double endBalance
-    ) { }
+            List<Double> checks,
+            List<Double> withdrawals,
+            List<Double> deposits,
+            boolean runMonthEnd,
+            double endBalance) {
+    }
 
     private static List<TestScenario> testScenarios;
 
     @Test
-    public void runTestScenarios() throws Exception {
+    public static void runTestScenarios(String filename) throws Exception {
         if (testScenarios == null) {
+            System.err.println("Starting tests for file: " + filename);
             System.err.println("\n\n");
             System.err.println("************************************");
             System.err.println("************************************");
@@ -55,7 +56,7 @@ public class CheckingAccountTestFixture {
 
             // set up account with specified starting balance
             CheckingAccount ca = new CheckingAccount(
-                    "test "+testNum, -1, scenario.initBalance, 0, -1);
+                    "test " + testNum, -1, scenario.initBalance, 0, -1);
 
             // now process checks, withdrawals, deposits
             for (double checkAmount : scenario.checks) {
@@ -90,10 +91,11 @@ public class CheckingAccountTestFixture {
                 r.getRunCount(), r.getRunCount() - r.getFailureCount(), r.getFailureCount());
         System.out.println("Failures:");
         for (Failure f : r.getFailures()) {
-            System.out.println("\t"+f);
+            System.out.println("\t" + f);
         }
     }
 
+    // TODO this could be added to TestScenario class
     private static List<Double> parseListOfAmounts(String amounts) {
         if (amounts.trim().isEmpty()) {
             return List.of();
@@ -107,8 +109,9 @@ public class CheckingAccountTestFixture {
         return ret;
     }
 
+    // TODO this could be added to TestScenario class
     private static TestScenario parseScenarioString(String scenarioAsString) {
-        String [] scenarioValues = scenarioAsString.split(",");
+        String[] scenarioValues = scenarioAsString.split(",");
         // should probably validate length here
         double initialBalance = Double.parseDouble(scenarioValues[0]);
         List<Double> checks = parseListOfAmounts(scenarioValues[1]);
@@ -116,8 +119,7 @@ public class CheckingAccountTestFixture {
         List<Double> deps = parseListOfAmounts(scenarioValues[3]);
         double finalBalance = Double.parseDouble(scenarioValues[4]);
         TestScenario scenario = new TestScenario(
-                initialBalance, checks, wds, deps, false, finalBalance
-        );
+                initialBalance, checks, wds, deps, false, finalBalance);
         return scenario;
     }
 
@@ -134,49 +136,25 @@ public class CheckingAccountTestFixture {
         return scenarios;
     }
 
-    public static void main(String [] args) throws IOException {
+    public static void main(String[] args) throws IOException {
         System.out.println("START");
 
-        // We can:
-        // ... manually populate the list of scenarios we want to test...
-        System.out.println("\n\n****** FROM OBJECTS ******\n");
-        testScenarios = List.of(
-                new TestScenario(100, List.of(), List.of(), List.of(), false, 100),
-                new TestScenario(100, List.of(10d), List.of(), List.of(), false, 90),
-                new TestScenario(100, List.of(10.,20.), List.of(), List.of(10.), true, 80)
-                );
-        runJunitTests();
+        if (args.length < 1) {
+            System.err.println("Please provide the filename as a command-line argument.");
+            System.exit(1);
+        }
 
-        // ...or create scenarios from a collection of strings...
-        // Format for each line: BALANCE,check_amt|check_amt|...,withdraw_amt|...,deposit_amt|...,end_balance
-        // note we left out runMonthEnd from our file format
+        String filename = args[0];
+        System.out.println("Running tests with data from: " + filename);
 
-        // Same scenarios as above plus one more to verify it's running these string scenarios
-        System.out.println("\n\n****** FROM STRINGS ******\n");
-        List<String> scenarioStrings = List.of(
-                "0, , , 10|20, 30",
-                "100, , , , 100",
-                "100, 10, , , 90",
-                "100, 10|20, , 10, 80"
-        );
-        List<TestScenario> parsedScenarios = parseScenarioStrings(scenarioStrings);
-        testScenarios = parsedScenarios;
-        runJunitTests();
-
-        // ...or populate with scenarios from a CSV file...
-        // now load these same scenarios from a file plus one more
-        System.out.println("\n\n****** FROM FILE ******\n");
-        // We could get the filename from the cmdline, e.g. "-f CheckingAccountScenarios.csv"
-        List<String> scenarioStringsFromFile = Files
-                .readAllLines(Paths.get(TEST_FILE.replace('/', File.separatorChar)));
-        testScenarios = parseScenarioStrings(scenarioStringsFromFile);
-        runJunitTests();
-
-        // ...or, we could also specify a single scenario on the command line,
-        // for example "-t '10, 20|20, , 40|10, 0'"
-        // Note the single-quotes because of the embedded spaces and the pipe symbol
-        System.out.println("Command-line arguments passed in: " + java.util.Arrays.asList(args));
-        
+        // Logic to read the file and use it for testing
+        try {
+            // Assuming you have logic to load data from the file
+            runTestScenarios(filename);
+        } catch (Exception e) {
+            System.err.println("Error reading file: " + e.getMessage());
+            System.exit(2);
+        }
         System.out.println("DONE");
     }
 }

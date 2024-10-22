@@ -40,5 +40,13 @@ public class CheckingAccountTest {
         acct.monthEnd();
         assertThat(acct.getBalance(), is(100d-10d));
     }
+
+    @Test
+    public void testInsufficientFundsWithOverdraft() throws Exception {
+        CheckingAccount account = new CheckingAccount("name", 0, 100, 1, -1);
+        account.withdraw(250); 
+        assertEquals(-150, account.getBalance(), 0.001); 
+    }
+
         
 }
