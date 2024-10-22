@@ -5,8 +5,13 @@ plugins {
     id 'pmd'
 }
 
+<<<<<<< HEAD
 java.sourceCompatibility "1.16"
 java.targetCompatibility "1.16"
+=======
+java.sourceCompatibility "22"
+java.targetCompatibility "22"
+>>>>>>> 9ad9c34 (assigment3 commit)
 
 group 'edu.rit.iste-422'
 version '1.0-SNAPSHOT'
@@ -72,3 +77,10 @@ dependencies {
     implementation 'org.apache.logging.log4j:log4j-api:2.13.3'
     implementation 'org.apache.logging.log4j:log4j-core:2.13.3'
 }
+<<<<<<< HEAD
+=======
+
+tasks.withType(JavaExec) {
+    jvmArgs += ['--add-opens', 'java.base/java.io=ALL-UNNAMED']
+}
+>>>>>>> 9ad9c34 (assigment3 commit)
