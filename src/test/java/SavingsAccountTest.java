@@ -35,10 +35,9 @@ public class SavingsAccountTest {
     @SuppressWarnings("deprecation")
 	@Test
     public void givenSavingsAccount_whenBelowMinimumBalance_thenFeeAppliedAtMonthEnd() {
-        // Test if below minimum balance fee is applied
         SavingsAccount s = new SavingsAccount("Test Account", 1, 500.0, 0.05, 1L);
-        s.setMinimumBalance(600);  // Set minimum balance higher than current balance
-        s.setBelowMinimumFee(10);  // Set below minimum fee
+        s.setMinimumBalance(600);  
+        s.setBelowMinimumFee(10);  
         s.monthEnd();
         assertThat("Balance should include below minimum fee deduction", s.getBalance(), is(490.0)); // 500 - 10 fee
     }
@@ -46,7 +45,6 @@ public class SavingsAccountTest {
 	@SuppressWarnings("deprecation")
     @Test
     public void givenSavingsAccount_whenToCSVCalled_thenCorrectCSVGenerated() {
-        // Test if toCSV method returns the correct CSV format
         SavingsAccount s = new SavingsAccount("Test Account", 123456L, 1000.0, 0.05, 1L);
         String expectedCsv = "123456, Test Account, 1000.0, 0.05, 1, v1";
         assertThat("CSV output should match the expected format", s.toCSV(), is(expectedCsv));

@@ -19,7 +19,6 @@ import java.util.List;
 
 public class CheckingAccountTestFixture {
     public static Logger logger = LogManager.getLogger(CheckingAccountTestFixture.class);
-    // We could read the file from classpath instead of hardcoding the pathname too
     //static final String TEST_FILE = "src/test/resources/CheckingAccountTest.csv";
 
     record TestScenario(double initBalance,
@@ -95,7 +94,6 @@ public class CheckingAccountTestFixture {
         }
     }
 
-    // TODO this could be added to TestScenario class
     private static List<Double> parseListOfAmounts(String amounts) {
         if (amounts.trim().isEmpty()) {
             return List.of();
@@ -109,10 +107,8 @@ public class CheckingAccountTestFixture {
         return ret;
     }
 
-    // TODO this could be added to TestScenario class
     private static TestScenario parseScenarioString(String scenarioAsString) {
         String[] scenarioValues = scenarioAsString.split(",");
-        // should probably validate length here
         double initialBalance = Double.parseDouble(scenarioValues[0]);
         List<Double> checks = parseListOfAmounts(scenarioValues[1]);
         List<Double> wds = parseListOfAmounts(scenarioValues[2]);
@@ -147,9 +143,7 @@ public class CheckingAccountTestFixture {
         String filename = args[0];
         System.out.println("Running tests with data from: " + filename);
 
-        // Logic to read the file and use it for testing
         try {
-            // Assuming you have logic to load data from the file
             runTestScenarios(filename);
         } catch (Exception e) {
             System.err.println("Error reading file: " + e.getMessage());
